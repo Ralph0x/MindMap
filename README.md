@@ -1,1 +1,1 @@
-# MindMap
+This repository contains the backend application for the MindMap project, leveraging Flask to setup a server and define essential routes. It includes a simple server status check and utilizes the mindmaps module to manage mind maps efficiently. The application listens on port 5000, providing a foundational structure for further development of the MindMap's functionalities.
