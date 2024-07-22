@@ -4,31 +4,26 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-log_level = os.getenv("LOG_LEVEL", "INFO").upper()
+log_level_env = os.getenv("LOG_LEVEL", "INFO").upper()
 
-# Setting up the logger
-logger = logging.getLogger("MindMapBackend")
-logger.setLevel(log_level)
+mindmap_logger = logging.getLogger("MindMapBackend")
+mindmap_logger.setLevel(log_level_env)
 
-# Console Handler
-console_handler = logging.StreamHandler()
-console_handler.setLevel(log_level)
+console_log_handler = logging.StreamHandler()
+console_log_handler.setLevel(log_level_env)
 
-# File Handler
-log_file_path = os.getenv("LOG_FILE_PATH", "mindmapbackend.log")
-file_handler = logging.FileHandler(log_file_path)
-file_handler.setLevel(log_level)
+log_file_path_env = os.getenv("LOG_FILE_PATH", "mindmapbackend.log")
+file_log_handler = logging.FileHandler(log_file_path_env)
+file_log_handler.setLevel(log_level_env)
 
-# Formatter
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+log_message_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 
-# Applying formatter to handlers
-console_handler.setFormatter(formatter)
-file_handler.setFormatter(formatter)
+log_formatter = logging.Formatter(log_message_format)
 
-# Adding handlers to the logger
-logger.addHandler(console_handler)
-logger.addHandler(file_handler)
+console_log_handler.setFormatter(log_formatter)
+file_log_handler.setFormatter(log_formatter)
 
-# Example usage
-logger.info("MindMap project has been successfully enhanced")
+mindmap_logger.addHandler(console_log_handler)
+mindmap_logger.addHandler(file_log_handler)
+
+mindmap_logger.info("MindMap project has been successfully enhanced")
