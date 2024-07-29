@@ -4,13 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MindMap Application</title>
+    <style>
+        #author-info {
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <div id="main-container">
+        <h1>MindMap Project</h1>
+        <button id="author-btn">About the Author</button>
+        <!-- Author Info, hidden by default -->
+        <div id="author-info" style="display: none;">
+            <h2>Author Page</h2>
+            <p>Name: John Doe</p>
+            <p>Email: johndoe@example.com</p>
+            <button id="back-btn">Back to Main Page</button>
+        </div>
     </div>
     <script>
         const API_URL = `${process.env.API_URL}`;
         console.log('API URL:', API_URL);
+
+        document.getElementById('author-btn').addEventListener('click', function() {
+            document.getElementById('author-info').style.display = 'block'; // Show the Author Info
+            this.style.display = 'none'; // Hide the 'About the Author' button
+        });
+
+        document.getElementById('back-btn').addEventListener('click', function() {
+            document.getElementById('author-info').style.display = 'none'; // Hide the Author Info
+            document.getElementById('author-btn').style.display = 'block'; // Show the 'About the Author' button again
+        });
     </script>
 </body>
 </html>
