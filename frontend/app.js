@@ -4,29 +4,64 @@ const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:3000';
 
 async function fetchData() {
   try {
-    const response = await axios.get(`${API_BASE_URL}/data`);
-    if (response.status === 200) {
-      displayData(response.data);
-    }
+    const response = await performGetDataRequest(`${API_BASE_URL}/data`);
+    checkResponseStatusAndDisplay(response);
   } catch (error) {
-    console.error('Error fetching data:', error);
+    handleError(error);
   }
 }
 
+async function performGetDataRequest(url) {
+  return await axios.get(url);
+}
+
+function checkResponseStatusAndDisplay(response) {
+  if (response.status === 200) {
+    displayData(response.data);
+  } else {
+    console.error('Unexpected response status:', response.status);
+  }
+}
+
+function handleError(error) {
+  console.error('Error fetching data:', error);
+}
+
 function displayData(data) {
-  const dataContainer = document.getElementById('data-container');
-  dataContainer.innerHTML = "";
+  const dataContainer = getElement('data-container');
+  clearElementInner(dataContainer);
   data.forEach(item => {
-    const itemElement = document.createElement('div');
-    itemElement.textContent = item.name;
-    dataContainer.appendChild(itemElement);
+    appendItemToContainer(dataContainer, item);
   });
+}
+
+function getElement(elementId) {
+  return document.getElementById(elementId);
+}
+
+function clearElementInner(element) {
+  element.innerHTML = "";
+}
+
+function appendItemToContainer(container, item) {
+  const itemElement = createElementWithText('div', item.name);
+  container.appendChild(itemElement);
+}
+
+function createElementWithText(tagName, text) {
+  const element = document.createElement(tagName);
+  element.textContent = text;
+  return element;
 }
 
 function initApp() {
   fetchData();
-  
-  document.getElementById('refresh-button').addEventListener('click', fetchData);
+  setupRefreshButtonEvent();
+}
+
+function setupRefreshButtonEvent() {
+  const refreshButton = getElement('refresh-button');
+  refreshButton.addEventListener('click', fetchData);
 }
 
 window.onload = initApp;
