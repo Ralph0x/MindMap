@@ -12,14 +12,18 @@ function MindMapView() {
   const [connections, setConnections] = useState([]);
 
   useEffect(() => {
-    async function loadData() {
-      const apiUrl = `${API_URL}/mindmaps`;
-      const data = await fetchMindMapData(apiUrl);
-      if (data) {
-        setNodes(data.nodes);
-        setConnections(data.connections);
+    const loadData = async () => {
+      try {
+        const apiUrl = `${API_URL}/mindmaps`;
+        const data = await fetchMindMapData(apiUrl);
+        if (data) {
+          setNodes(data.nodes);
+          setConnections(data.connections);
+        }
+      } catch (error) {
+        console.error("Failed to fetch mind map data:", error);
       }
-    }
+    };
 
     loadData();
   }, []);
@@ -29,12 +33,12 @@ function MindMapView() {
   };
 
   return (
-    <div className="mindMapContainer">
+    <div className="mindMapContainer" style={{ position: 'relative' }}>
       {nodes.map((node) => (
         <div
           key={node.id}
           className="node"
-          style={{ left: node.position.x, top: node.position.y }}
+          style={{ position: 'absolute', left: node.position.x, top: node.position.y }}
           onClick={() => handleNodeClick(node.id)}
         >
           {node.title}
