@@ -10,6 +10,7 @@ const defaultNodes = [
 function MindMapView() {
   const [nodes, setNodes] = useState(defaultNodes);
   const [connections, setConnections] = useState([]);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const loadData = async () => {
@@ -19,17 +20,22 @@ function MindMapView() {
         if (data) {
           setNodes(data.nodes);
           setConnections(data.connections);
+          setError('');
+        } else {
+          throw new Error('Invalid data structure received from API');
         }
       } catch (error) {
         console.error("Failed to fetch mind map data:", error);
+        setError("Failed to load data. Please try again later.");
       }
     };
 
     loadData();
   }, []);
 
-  const handleNodeClick = (nodeId) => {
-    console.log(`Node ${nodeId} clicked`);
+  const renderError = () => {
+    if (!error) return null;
+    return <div style={{color: 'red', marginTop: '10px'}}>{error}</div>;
   };
 
   return (
@@ -44,6 +50,7 @@ function MindMapView() {
           {node.title}
         </div>
       ))}
+      {renderError()}
     </div>
   );
 }
