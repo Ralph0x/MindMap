@@ -22,6 +22,16 @@ const MindMapForm = ({ onSubmit, initialData = {} }) => {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   }, []);
 
+  const handleBlur = useCallback((event) => {
+    const { name, value } = event.target;
+    const capitalized = capitalizeFirstLetter(value);
+    setFormData((prevData) => ({ ...prevData, [name]: capitalized }));
+  }, []);
+
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+
   const handleSubmit = useCallback((e) => {
     e.preventDefault();
     if (!validateForm()) {
@@ -39,6 +49,7 @@ const MindMapForm = ({ onSubmit, initialData = {} }) => {
         name="title"
         value={formData.title}
         onChange={handleChange}
+        onBlur={handleBlur}
         error={formErrors.title}
       />
       <FormField
@@ -47,6 +58,7 @@ const MindMapForm = ({ onSubmit, initialData = {} }) => {
         name="description"
         value={formData.description}
         onChange={handleChange}
+        onBlur={handleBlur}
         error={formErrors.description}
       />
       <button type="submit">Submit</button>
@@ -54,7 +66,7 @@ const MindMapForm = ({ onSubmit, initialData = {} }) => {
   );
 };
 
-const FormField = ({ label, type, name, value, onChange, error }) => (
+const FormField = ({ label, type, name, value, onChange, onBlur, error }) => (
   <div>
     <label htmlFor={name}>{label}</label>
     {type === "textarea" ? (
@@ -63,6 +75,7 @@ const FormField = ({ label, type, name, value, onChange, error }) => (
         name={name}
         value={value}
         onChange={onChange}
+        onBlur={onBlur}
         required
       />
     ) : (
@@ -72,6 +85,7 @@ const FormField = ({ label, type, name, value, onChange, error }) => (
         name={name}
         value={value}
         onChange={onChange}
+        onBlur={onBlur}
         required
       />
     )}
